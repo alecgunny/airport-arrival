@@ -1,10 +1,11 @@
 name: airport
 dependencies:
   - python>=3.7
-  - jupyter-book>=0.7.0b
   - bokeh
   - pip
   - pymc3
   - numpy
   - pandas
   - jupyter
+  - pip:
+    - jupyter-book
