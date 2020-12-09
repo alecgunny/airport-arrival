@@ -26,7 +26,7 @@ jobs:
     # Build the book
     - name: Build the book
       run: |
-        conda activate airport
+        source activate airport
         jupyter-book build .
 
     # Push the book's HTML to github-pages
