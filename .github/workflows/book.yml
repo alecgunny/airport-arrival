@@ -24,7 +24,8 @@ jobs:
     # Build the book
     - name: Build the book
       run: |
-        /usr/share/miniconda/condabin/conda activate airport
+        eval "$(${CONDA}/bin/conda shell.bash hook)"
+        conda activate airport
         jupyter-book build .
 
     # Push the book's HTML to github-pages
