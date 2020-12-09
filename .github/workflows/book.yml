@@ -21,12 +21,13 @@ jobs:
 
     - name: Install dependencies
       run: |
+        conda init bash
         conda env create -f environment.yaml airport
 
     # Build the book
     - name: Build the book
       run: |
-        source activate airport
+        conda activate airport
         jupyter-book build .
 
     # Push the book's HTML to github-pages
