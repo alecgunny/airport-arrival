@@ -1,5 +1,5 @@
 from collections import defaultdict
-from itertools import cycle
+from itertools import cycle, product
 import numpy as np
 
 from bokeh.io import curdoc
@@ -48,28 +48,23 @@ def plot_functions(fs, x_min=0, x_max=10, plot_kwargs={}):
                 "found type {}".format(type(f))
             )
 
-    if isinstance(fs, dict):
-        data = defaultdict(list)
-        color_iterator = cycle(palette)
-        for (legend_label, f), color in zip(fs.items(), color_iterator):
-            x = np.linspace(x_min, x_max, 100)
-            y = _do_call(f, x)
+    if not isinstance(fs, dict):
+        fs = {None: fs}
 
-            data["xs"].append(x)
-            data["ys"].append(y)
-            data["label"].append(legend_label)
-            data["color"].append(color)
-
-        source = ColumnDataSource(data)
-        p.multi_line(
-            xs="xs",
-            ys="ys",
-            legend_group="label",
-            line_color="color",
-            source=source
-        )
-    else:
+    dashes = ["solid", "2 2", "4 4"]
+    prop_iterator = cycle(product(dashes, palette))
+    for (legend_label, f), (dash, color) in zip(fs.items(), prop_iterator):
         x = np.linspace(x_min, x_max, 100)
-        y = _do_call(fs, x)
-        p.line(x=x, y=y)
+        y = _do_call(f, x)
+
+        kwargs = {}
+        if legend_label is not None:
+            kwargs["legend_label"] = legend_label
+        p.line(
+            x=x,
+            y=y,
+            line_color=color,
+            line_dash=dash,
+            **kwargs
+        )
     return p
